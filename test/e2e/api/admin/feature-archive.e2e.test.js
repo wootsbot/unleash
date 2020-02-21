@@ -47,7 +47,7 @@ test.serial(
             .get('/api/admin/features/featureArchivedZ')
             .set('Content-Type', 'application/json')
             .expect(404);
-    }
+    },
 );
 
 test.serial('must set name when reviving toggle', async t => {

@@ -30,9 +30,9 @@ test.serial('should require authenticated user', async t => {
                         path: '/api/admin/login',
                         type: 'custom',
                         message: `You have to identify yourself.`,
-                    })
+                    }),
                 )
-                .end()
+                .end(),
         );
     };
     const request = await setupAppWithCustomAuth(stores, preHook);

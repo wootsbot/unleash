@@ -14,6 +14,6 @@ unleash
     })
     .then(server => {
         console.log(
-            `Unleash started on http://localhost:${server.app.get('port')}`
+            `Unleash started on http://localhost:${server.app.get('port')}`,
         );
     });

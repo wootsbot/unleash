@@ -15,10 +15,10 @@
  */
 
 // const  { User, AuthenticationRequired } = require('unleash-server');
-const { User, AuthenticationRequired } = require('../lib/server-impl.js');
 
 const KeycloakStrategy = require('@exlinc/keycloak-passport');
 const passport = require('passport');
+const { User, AuthenticationRequired } = require('../lib/server-impl.js');
 
 const host = process.env.AUTH_HOST;
 const realm = process.env.AUTH_REALM;
@@ -45,10 +45,10 @@ passport.use(
                 new User({
                     name: profile.fullName,
                     email: profile.email,
-                })
+                }),
             );
-        }
-    )
+        },
+    ),
 );
 
 function enableKeycloakOauth(app) {
@@ -65,7 +65,7 @@ function enableKeycloakOauth(app) {
         passport.authenticate('keycloak'),
         (req, res) => {
             res.redirect(`${contextPath}/`);
-        }
+        },
     );
 
     app.use('/api/admin/', (req, res, next) => {
@@ -81,7 +81,7 @@ function enableKeycloakOauth(app) {
                         type: 'custom',
                         message: `You have to identify yourself in order to use Unleash. 
                         Click the button and follow the instructions.`,
-                    })
+                    }),
                 )
                 .end();
         }

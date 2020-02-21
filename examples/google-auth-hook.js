@@ -38,10 +38,10 @@ passport.use(
                 new User({
                     name: profile.displayName,
                     email: profile.emails[0].value,
-                })
+                }),
             );
-        }
-    )
+        },
+    ),
 );
 
 function enableGoogleOauth(app) {
@@ -52,7 +52,7 @@ function enableGoogleOauth(app) {
     passport.deserializeUser((user, done) => done(null, user));
     app.get(
         '/api/admin/login',
-        passport.authenticate('google', { scope: ['email'] })
+        passport.authenticate('google', { scope: ['email'] }),
     );
 
     app.get(
@@ -63,7 +63,7 @@ function enableGoogleOauth(app) {
         (req, res) => {
             // Successful authentication, redirect to your app.
             res.redirect('/');
-        }
+        },
     );
 
     app.use('/api/admin/', (req, res, next) => {
@@ -79,7 +79,7 @@ function enableGoogleOauth(app) {
                         type: 'custom',
                         message: `You have to identify yourself in order to use Unleash. 
                         Click the button and follow the instructions.`,
-                    })
+                    }),
                 )
                 .end();
         }
