@@ -21,6 +21,9 @@
     },
     "context": {
       "uri": "/api/admin/context"
+    },
+    "integrations": {
+      "uri": "/api/admin/integrations"
     }
   }
 }
