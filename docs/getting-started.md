@@ -43,7 +43,14 @@ unleash
 
 Available unleash options include:
 
-- **databaseUrl** - the postgres database url to connect to. Should include username/password. This value may also be set via the `DATABASE_URL` environment variable. Alternatively, if you would like to read the database url from a file, you may set the `DATABASE_URL_FILE` environment variable with the full file path. The contents of the file must be the database url exactly.
+- **db** - The database configuration object taking the following properties:
+  - _user_ - the database username (`DATABASE_USERNAME`)
+  - _password_ - the database password (`DATABASE_PASSWORD`)
+  - _host_ - the database hostname (`DATABASE_HOST`)
+  - _port_ - the datbase port defaults to 5432 (`DATABASE_PORT`)
+  - _database_ - the database name to be used (`DATABASE_NAME`)
+  - _ssl_ - an object describin ssl options, see https://node-postgres.com/features/ssl (`DATABASE_SSL`, as a stringified json object)
+- **databaseUrl** - the postgres database url to connect to. Only used if _db_ object is not specified. Should include username/password. This value may also be set via the `DATABASE_URL` environment variable. Alternatively, if you would like to read the database url from a file, you may set the `DATABASE_URL_FILE` environment variable with the full file path. The contents of the file must be the database url exactly.
 - **databaseSchema** - the postgres database schema to use. Defaults to 'public'.
 - **port** - which port the unleash-server should bind to. If port is omitted or is 0, the operating system will assign an arbitrary unused port. Will be ignored if pipe is specified. This value may also be set via the `HTTP_PORT` environment variable
 - **host** - which host the unleash-server should bind to. If host is omitted, the server will accept connections on the unspecified IPv6 address (::) when IPv6 is available, or the unspecified IPv4 address (0.0.0.0) otherwise. This value may also be set via the `HTTP_HOST` environment variable
@@ -59,7 +66,26 @@ Available unleash options include:
 - **ui** (object) - Set of UI specific overrides. You may set the following keys: `headerBackground`, `environment`, `slogan`.
 - **getLogger** (function) - Used to register a [custom log provider](#How do I configure the log output).
 - **eventHook** (`function(event, data)`) - If provided, this function will be invoked whenever a feature is mutated. The possible values for `event` are `'feature-created'`, `'feature-updated'`, `'feature-archived'`, `'feature-revived'`. The `data` argument contains information about the mutation. Its fields are `type` (string) - the event type (same as `event`); `createdBy` (string) - the user who performed the mutation; `data` - the contents of the change. The contents in `data` differs based on the event type; For `'feature-archived'` and `'feature-revived'`, the only field will be `name` - the name of the feature. For `'feature-created'` and `'feature-updated'` the data follows a schema defined in the code [here](https://github.com/Unleash/unleash/blob/master/lib/routes/admin-api/feature-schema.js#L38-L59). See an example [here](./guides/feautre-updates-to-slack.md).
-- **baseUriPath** (string) - use to register a base path for all routes on the application. For example `my/unleash/base`. Defaults to `/`.
+- **baseUriPath** (string) - use to register a base path for all routes on the application. For example `/my/unleash/base` (note the starting /). Defaults to `/`. Can also be configured through the environment variable `BASE_URI_PATH`.
+
+#### Disabling Auto-Start
+
+If you're using unleash as part of a larger express app, you can disable the automatic server start by calling `server.create`. It takes the same options as `sevrer.start`, but will not begin listening for connections.
+
+```js
+const unleash = require('unleash-server');
+// ... const app = express();
+
+unleash
+  .create({
+    databaseUrl: 'postgres://unleash_user:password@localhost:5432/unleash',
+    port: 4242,
+  })
+  .then(result => {
+    app.use(result.app);
+    console.log(`Unleash app generated and attached to parent application`);
+  });
+```
 
 ### 3. Docker
 
