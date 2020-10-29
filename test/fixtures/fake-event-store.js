@@ -4,6 +4,7 @@ module.exports = () => {
     const events = [];
 
     return {
+        on: () => {},
         store: event => {
             events.push(event);
             return Promise.resolve();
